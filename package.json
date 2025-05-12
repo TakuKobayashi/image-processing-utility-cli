@@ -1,0 +1,38 @@
+{
+  "name": "image-converter",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "format": "prettier --config .prettierrc --write \"src/**/*.{ts,js}\"",
+    "docs": "typedoc --tsconfig tsconfig.json --entryPoints src/**/*.ts --out docs/",
+    "tsx": "tsx",
+    "convert": "tsx src/cli.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TakuKobayashi/image-converter-cli.git"
+  },
+  "keywords": [
+    "npm"
+  ],
+  "author": "TakuKobayashi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TakuKobayashi/image-converter-cli/issues"
+  },
+  "homepage": "https://github.com/TakuKobayashi/image-converter-cli#readme",
+  "description": "",
+  "devDependencies": {
+    "@types/node": "^22.15.17",
+    "commander": "^13.1.0",
+    "documentation": "^14.0.3",
+    "prettier": "^3.5.3",
+    "tsx": "^4.19.4",
+    "typedoc": "^0.28.4",
+    "typescript": "^5.8.3",
+    "typings": "^2.1.1"
+  },
+  "dependencies": {
+    "fast-glob": "^3.3.3"
+  }
+}
