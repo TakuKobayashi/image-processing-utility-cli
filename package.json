@@ -1,12 +1,12 @@
 {
-  "name": "image-converter",
+  "name": "image-processing-cli",
   "version": "0.0.1",
   "main": "index.js",
   "scripts": {
     "format": "prettier --config .prettierrc --write \"src/**/*.{ts,js}\"",
     "docs": "typedoc --tsconfig tsconfig.json --entryPoints src/**/*.ts --out docs/",
     "tsx": "tsx",
-    "ic": "tsx src/cli.ts"
+    "ipc": "tsx src/cli.ts"
   },
   "repository": {
     "type": "git",

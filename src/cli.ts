@@ -4,7 +4,7 @@ import path from 'node:path';
 import fg from 'fast-glob';
 import sharp from 'sharp';
 import crypto from 'node:crypto';
-import fs from 'node:fs/promises';
+import fs from 'node:fs';
 
 /**
  * Set global CLI configurations
@@ -15,17 +15,33 @@ program.version(packageJson.version, '-v, --version');
 
 program
   .command('convert')
-  .description('Split a string into substrings and display as an array')
-  .option('-p, --root-path <path>', 'display just the first substring', './')
-  .option('-f, --from-extension <fromExt>', 'separator character', 'jpg')
-  .option('-t, --to-extension <toExt>', 'separator character', 'png')
-  .action(async (options) => {
-    const imageFilePathes = fg.sync([...options.rootPath.split(path.sep), '**', `*.${options.fromExtension}`].join('/'), { dot: true });
-    for(const imageFilePath of imageFilePathes) {
-      const outputFilePath = imageFilePath.replace(path.extname(imageFilePath), `.${options.toExtension}`)
-      const converted = await sharp(imageFilePath).png().toFile(outputFilePath)
+  .description('search and convert image files')
+  .option('-i, --input <path>', 'input filepath')
+  .option('-id, --input-directory <path>', 'input directory path')
+  .option('-if, --input-format <format>', 'filter input file format')
+  .option('-o, --output <path>', 'output file path')
+  .option('-od, --output-directory <path>', 'output root directory path')
+  .option('-f, --format <format>', 'convert to image format')
+  .action(async (output, options) => {
+    const inputPath = options.input
+    const imageFilePathes = [];
+    const inputDirectoryPath = options.inputDirectory
+    if (inputDirectoryPath) {
+
+    }
+    const pathes = fg.sync([...inputDirectoryPath.split(path.sep).join('/'), "**", ], { dot: true });
+    if (!fs.existsSync(inputPath)) {
+      return;
+    }
+    const inputStat = fs.lstatSync(inputPath);
+    console.log(options);
+
+    const convertImageFormat = options.format as (keyof sharp.FormatEnum | sharp.AvailableFormatInfo);
+    for (const imageFilePath of imageFilePathes) {
+      const converted = await sharp(imageFilePath).toFormat(convertImageFormat).toFile(output);
       console.log(converted);
     }
   });
+
 
 program.parse(process.argv);
