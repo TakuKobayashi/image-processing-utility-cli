@@ -4,6 +4,7 @@ import path from 'node:path';
 import fg from 'fast-glob';
 import sharp, { OutputInfo, FormatEnum, AvailableFormatInfo } from 'sharp';
 import fs from 'node:fs';
+import cliProgress, { SingleBar } from 'cli-progress';
 
 /**
  * Set global CLI configurations
@@ -29,14 +30,6 @@ program
       | AvailableFormatInfo;
     await convertImage(inputFilePath.toString(), outputFilePath, convertImageFormat);
   });
-
-async function convertImage(
-  imageFilePath: string,
-  outputFilePath: string,
-  convertImageFormat: keyof FormatEnum | AvailableFormatInfo,
-): Promise<OutputInfo | null> {
-  return sharp(imageFilePath).toFormat(convertImageFormat).toFile(outputFilePath);
-}
 
 program
   .command('bulk-convert')
@@ -69,11 +62,37 @@ program
       imageFilePathes.push(filePath);
     }
     const convertImageFormat = options.format.toString().toLowerCase();
+    const convertPromises: Promise<any>[] = [];
+    const progressBar = new cliProgress.SingleBar(
+      {
+        format: '{bar} | {value}/{total} | {inputFileName} => {outputFileName}',
+      },
+      cliProgress.Presets.shades_classic,
+    );
+    progressBar.start(imageFilePathes.length, 0);
     for (const imageFilePath of imageFilePathes) {
       const imageFileName = path.basename(imageFilePath.toString().split(path.sep).join('/'));
-      const outputImagePath = imageFileName.replace(path.extname(imageFileName), `.${convertImageFormat}`);
-      await convertImage(imageFilePath, outputImagePath, convertImageFormat);
+      const outputImageName = imageFileName.replace(path.extname(imageFileName), `.${convertImageFormat}`);
+      const outputImagePath = path.resolve(outputDirectoryPath, outputImageName);
+      convertPromises.push(
+        convertImage(imageFilePath, outputImagePath, convertImageFormat).then((result) => {
+          progressBar.increment(1, {
+            inputFileName: imageFilePath,
+            outputFileName: outputImagePath,
+          });
+        }),
+      );
     }
+    await Promise.all(convertPromises);
+    progressBar.stop();
   });
+
+async function convertImage(
+  imageFilePath: string,
+  outputFilePath: string,
+  convertImageFormat: keyof FormatEnum | AvailableFormatInfo,
+): Promise<OutputInfo | null> {
+  return sharp(imageFilePath).toFormat(convertImageFormat).toFile(outputFilePath);
+}
 
 program.parse(process.argv);
