@@ -6,7 +6,7 @@
     "format": "prettier --config .prettierrc --write \"src/**/*.{ts,js}\"",
     "docs": "typedoc --tsconfig tsconfig.json --entryPoints src/**/*.ts --out docs/",
     "tsx": "tsx",
-    "ipc": "tsx src/cli.ts"
+    "ipuc": "tsx src/cli.ts"
   },
   "repository": {
     "type": "git",
