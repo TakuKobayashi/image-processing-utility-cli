@@ -4,6 +4,7 @@ import path from 'node:path';
 import fg from 'fast-glob';
 import sharp, { OutputInfo, FormatEnum, AvailableFormatInfo } from 'sharp';
 import fs from 'node:fs';
+import ExifReader from 'exifreader';
 import cliProgress, { SingleBar } from 'cli-progress';
 
 /**
@@ -87,12 +88,32 @@ program
     progressBar.stop();
   });
 
+program
+  .command('export-exif')
+  .description('export exif from image file')
+  .option('-i, --input <path>', 'input filepath')
+  .option('-o, --output <path>', 'output json filepath')
+  .action(async (options) => {
+    const inputFilePath = options.input;
+    if (!inputFilePath || !fs.existsSync(inputFilePath)) {
+      throw new Error('input file not found');
+    }
+    const info = await ExifReader.load(inputFilePath);
+    const output = options.output;
+    if (output) {
+      const outputFilePath = path.resolve(output);
+      fs.writeFileSync(outputFilePath, JSON.stringify(info));
+    } else {
+      console.log(info);
+    }
+  });
+
 async function convertImage(
   imageFilePath: string,
   outputFilePath: string,
   convertImageFormat: keyof FormatEnum | AvailableFormatInfo,
 ): Promise<OutputInfo | null> {
-  return sharp(imageFilePath).toFormat(convertImageFormat).toFile(outputFilePath);
+  return sharp(imageFilePath).keepExif().toFormat(convertImageFormat).toFile(outputFilePath);
 }
 
 program.parse(process.argv);

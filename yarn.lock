@@ -624,6 +624,11 @@
   resolved "https://registry.yarnpkg.com/@vue/shared/-/shared-3.5.13.tgz#87b309a6379c22b926e696893237826f64339b6f"
   integrity sha512-/hnE/qP5ZoGpol0a5mDi45bOd7t3tjYJBjsgCsivow7D48cJeV5l05RD82lPqi7gRiphZM37rnhW1l6ZoCNNnQ==
 
+"@xmldom/xmldom@^0.9.4":
+  version "0.9.8"
+  resolved "https://registry.yarnpkg.com/@xmldom/xmldom/-/xmldom-0.9.8.tgz#1471e82bdff9e8f20ee8bbe60d4ffa8a516e78d8"
+  integrity sha512-p96FSY54r+WJ50FIOsCOjyj/wavs8921hG5+kVMmZgKcvIKxMXHTrjNJvRgWa/zuX3B6t2lijLNFaOyuxUH+2A==
+
 abbrev@1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"
@@ -1312,6 +1317,13 @@ execa@^0.7.0:
     p-finally "^1.0.0"
     signal-exit "^3.0.0"
     strip-eof "^1.0.0"
+
+exifreader@^4.31.0:
+  version "4.31.0"
+  resolved "https://registry.yarnpkg.com/exifreader/-/exifreader-4.31.0.tgz#d8e5e7cf1f8b4886c31eee6f9b990c8001b438ff"
+  integrity sha512-nwtWnoheEI0IuPQ9mascB105aMtj/Gg4GMP0Tbks2vw6UXrK2Bhab4Ogo9MKYW1KoyGj/FV6KVIhVbNCoj0WQA==
+  optionalDependencies:
+    "@xmldom/xmldom" "^0.9.4"
 
 exit-hook@^1.0.0:
   version "1.1.1"
